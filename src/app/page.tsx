@@ -56,7 +56,9 @@ export default function App() {
             Lagi Lagi <span className="text-lime-400">Saham</span>
           </div>
           <a
-            href="#telegram"
+            href="https://t.me/lagilagisaham"
+            target="_blank"
+            rel="noopener noreferrer"
             className="hidden sm:flex items-center gap-2 text-sm font-semibold bg-slate-800/50 hover:bg-slate-800 px-4 py-2 rounded-full transition-colors border border-slate-700/50 hover:border-lime-400/50"
           >
             Masuk Grup <Send size={16} className="text-lime-400" />
@@ -206,7 +208,9 @@ export default function App() {
 
           <div className="text-center">
             <a
-              href="#telegram"
+              href="https://t.me/lagilagisaham"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-slate-800/50 hover:bg-slate-800 text-white px-6 py-3 rounded-xl font-medium transition-all border border-slate-700 hover:border-lime-400"
             >
               <Lock size={18} className="text-lime-400" />
@@ -300,7 +304,7 @@ export default function App() {
           </p>
 
           <a
-            href="https://t.me/LagilagiSahamExample"
+            href="https://t.me/lagilagisaham"
             target="_blank"
             rel="noopener noreferrer"
             className="group primary-btn relative inline-flex items-center justify-center gap-3 bg-lime-400 hover:bg-lime-500 text-[#0B0F19] px-10 py-5 rounded-full text-xl font-extrabold transition-all duration-300 transform hover:scale-105 shadow-[0_10px_30px_-10px_rgba(163,230,53,0.5)] w-full sm:w-auto mb-16"
