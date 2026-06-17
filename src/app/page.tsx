@@ -1,22 +1,49 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, Send, Download, Lock, CheckCircle, ShieldAlert, BookOpen, BarChart2, Target } from 'lucide-react';
+import { TrendingUp, Send, Download, Lock, CheckCircle, ShieldAlert, BookOpen, BarChart2, Target, User, LogOut } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('mingguan');
   const [unlockedStocks, setUnlockedStocks] = useState<string[]>([]);
   const [stocksData, setStocksData] = useState<any[]>([]);
+  const [modulesData, setModulesData] = useState<any[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    setIsLoggedIn(document.cookie.includes('auth_token'));
     fetch('/api/stocks')
       .then(res => res.json())
       .then(data => setStocksData(data))
       .catch(err => console.error(err));
+    fetch('/api/modules')
+      .then(res => res.json())
+      .then(data => setModulesData(data))
+      .catch(err => console.error(err));
   }, []);
 
+  const handleLogout = () => {
+    document.cookie = 'auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    setIsLoggedIn(false);
+    window.location.reload();
+  };
+
   const handleUnlock = (ticker: string) => {
+    const isLoggedIn = document.cookie.includes('auth_token');
+    if (!isLoggedIn) {
+      window.location.href = '/login';
+      return;
+    }
+
     if (!unlockedStocks.includes(ticker)) {
       setUnlockedStocks(prev => [...prev, ticker]);
+    }
+  };
+
+  const handleDownload = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const isLoggedIn = document.cookie.includes('auth_token');
+    if (!isLoggedIn) {
+      e.preventDefault();
+      window.location.href = '/login';
     }
   };
 
@@ -55,14 +82,36 @@ export default function App() {
             </div>
             Lagi Lagi <span className="text-lime-400">Saham</span>
           </div>
-          <a
-            href="https://t.me/lagilagisaham"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-2 text-sm font-semibold bg-slate-800/50 hover:bg-slate-800 px-4 py-2 rounded-full transition-colors border border-slate-700/50 hover:border-lime-400/50"
-          >
-            Masuk Grup <Send size={16} className="text-lime-400" />
-          </a>
+          
+          <div className="flex items-center gap-3">
+            <a
+              href="https://t.me/lagilagisaham"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:flex items-center gap-2 text-sm font-semibold bg-slate-800/50 hover:bg-slate-800 px-4 py-2 rounded-full transition-colors border border-slate-700/50 hover:border-lime-400/50"
+            >
+              Masuk Grup <Send size={16} className="text-lime-400" />
+            </a>
+            
+            {isLoggedIn ? (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-sm font-semibold bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white px-4 py-2 rounded-full transition-colors border border-rose-500/20"
+                >
+                  <LogOut size={16} />
+                  <span className="hidden sm:inline">Logout</span>
+                </button>
+              </div>
+            ) : (
+              <a
+                href="/login"
+                className="flex items-center gap-2 text-sm font-semibold bg-lime-400/10 text-lime-400 hover:bg-lime-400 hover:text-[#0B0F19] px-4 py-2 rounded-full transition-colors border border-lime-400/20"
+              >
+                Login
+              </a>
+            )}
+          </div>
         </div>
       </header>
 
@@ -234,62 +283,31 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Box Modul 1 */}
-            <div className="bg-[#0F1523] p-8 rounded-3xl border border-slate-800 hover:border-lime-400/50 transition-all duration-300 group flex flex-col h-full hover:-translate-y-1 shadow-lg shadow-black/50">
-              <div className="w-14 h-14 bg-[#0B0F19] rounded-2xl flex items-center justify-center border border-slate-700 mb-6 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-                <BookOpen size={28} className="text-lime-400" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-lime-400 transition-colors">Modul 1: Mindset & Fondasi</h3>
-              <p className="text-slate-400 text-sm mb-8 flex-grow leading-relaxed">
-                Pahami psikologi trading, manajemen risiko, dan cara kerja bandar saham sebelum Anda mempertaruhkan modal pertama Anda.
-              </p>
-              <a
-                href="/modul-1.pdf"
-                download
-                className="inline-flex items-center justify-center gap-2 w-full bg-[#0B0F19] border border-slate-700 group-hover:bg-lime-400 group-hover:text-[#0B0F19] group-hover:border-lime-400 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-300"
-              >
-                <Download size={18} />
-                Unduh Modul 1
-              </a>
-            </div>
-
-            {/* Box Modul 2 */}
-            <div className="bg-[#0F1523] p-8 rounded-3xl border border-slate-800 hover:border-lime-400/50 transition-all duration-300 group flex flex-col h-full hover:-translate-y-1 shadow-lg shadow-black/50">
-              <div className="w-14 h-14 bg-[#0B0F19] rounded-2xl flex items-center justify-center border border-slate-700 mb-6 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-                <BarChart2 size={28} className="text-lime-400" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-lime-400 transition-colors">Modul 2: Analisa Teknikal</h3>
-              <p className="text-slate-400 text-sm mb-8 flex-grow leading-relaxed">
-                Cara membaca candlestick, menentukan support & resistance, serta mengenali pola chart yang sering memberikan profit.
-              </p>
-              <a
-                href="/modul-2.pdf"
-                download
-                className="inline-flex items-center justify-center gap-2 w-full bg-[#0B0F19] border border-slate-700 group-hover:bg-lime-400 group-hover:text-[#0B0F19] group-hover:border-lime-400 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-300"
-              >
-                <Download size={18} />
-                Unduh Modul 2
-              </a>
-            </div>
-
-            {/* Box Modul 3 */}
-            <div className="bg-[#0F1523] p-8 rounded-3xl border border-slate-800 hover:border-lime-400/50 transition-all duration-300 group flex flex-col h-full hover:-translate-y-1 shadow-lg shadow-black/50">
-              <div className="w-14 h-14 bg-[#0B0F19] rounded-2xl flex items-center justify-center border border-slate-700 mb-6 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-                <Target size={28} className="text-lime-400" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-lime-400 transition-colors">Modul 3: Strategi Entry</h3>
-              <p className="text-slate-400 text-sm mb-8 flex-grow leading-relaxed">
-                Teknik sniper entry, menentukan target harga rasional, dan cara disiplin melakukan cut loss agar modal tidak nyangkut.
-              </p>
-              <a
-                href="/modul-3.pdf"
-                download
-                className="inline-flex items-center justify-center gap-2 w-full bg-[#0B0F19] border border-slate-700 group-hover:bg-lime-400 group-hover:text-[#0B0F19] group-hover:border-lime-400 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-300"
-              >
-                <Download size={18} />
-                Unduh Modul 3
-              </a>
-            </div>
+            {modulesData.map((mod) => {
+              const IconComponent = mod.iconName === 'BarChart2' ? BarChart2 : mod.iconName === 'Target' ? Target : BookOpen;
+              return (
+                <div key={mod.id} className="bg-[#0F1523] p-8 rounded-3xl border border-slate-800 hover:border-lime-400/50 transition-all duration-300 group flex flex-col h-full hover:-translate-y-1 shadow-lg shadow-black/50">
+                  <div className="w-14 h-14 bg-[#0B0F19] rounded-2xl flex items-center justify-center border border-slate-700 mb-6 group-hover:scale-110 transition-transform duration-300 shadow-inner">
+                    <IconComponent size={28} className="text-lime-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-lime-400 transition-colors">{mod.title}</h3>
+                  <p className="text-slate-400 text-sm mb-8 flex-grow leading-relaxed">
+                    {mod.description}
+                  </p>
+                  <a
+                    href={mod.linkUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={handleDownload}
+                    className="inline-flex items-center justify-center gap-2 w-full bg-[#0B0F19] border border-slate-700 group-hover:bg-lime-400 group-hover:text-[#0B0F19] group-hover:border-lime-400 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-300"
+                  >
+                    <Download size={18} />
+                    Akses Modul
+                  </a>
+                </div>
+              );
+            })}
+            {modulesData.length === 0 && <div className="col-span-3 text-center text-slate-500 py-10">Belum ada modul yang ditambahkan.</div>}
           </div>
         </div>
       </section>

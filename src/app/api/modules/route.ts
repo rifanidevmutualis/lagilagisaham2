@@ -1,21 +1,8 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { cookies } from 'next/headers';
 
 const prisma = new PrismaClient();
-
-export async function GET() {
-  try {
-    const stocks = await prisma.stock.findMany({
-      orderBy: { id: 'asc' }
-    });
-    return NextResponse.json(stocks);
-  } catch (error) {
-    console.error('Error fetching stocks:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-  }
-}
-
-import { cookies } from 'next/headers';
 
 async function checkAdmin() {
   const cookieStore = await cookies();
@@ -25,14 +12,23 @@ async function checkAdmin() {
   return user?.role === 'ADMIN';
 }
 
+export async function GET() {
+  try {
+    const modules = await prisma.module.findMany({ orderBy: { id: 'asc' } });
+    return NextResponse.json(modules);
+  } catch (error) {
+    return NextResponse.json({ error: 'Failed to fetch modules' }, { status: 500 });
+  }
+}
+
 export async function POST(req: Request) {
   if (!(await checkAdmin())) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   
   try {
     const body = await req.json();
-    const newStock = await prisma.stock.create({ data: body });
-    return NextResponse.json(newStock, { status: 201 });
+    const newModule = await prisma.module.create({ data: body });
+    return NextResponse.json(newModule, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create stock' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to create module' }, { status: 500 });
   }
 }
