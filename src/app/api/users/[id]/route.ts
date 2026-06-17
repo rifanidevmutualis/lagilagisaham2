@@ -12,13 +12,14 @@ async function checkAdmin() {
   return user?.role === 'ADMIN';
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!(await checkAdmin())) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   
   try {
+    const { id } = await params;
     const { role } = await req.json();
     const updated = await prisma.user.update({
-      where: { id: parseInt(params.id) },
+      where: { id: parseInt(id) },
       data: { role }
     });
     return NextResponse.json(updated);
@@ -27,11 +28,12 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   if (!(await checkAdmin())) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   try {
-    await prisma.user.delete({ where: { id: parseInt(params.id) } });
+    const { id } = await params;
+    await prisma.user.delete({ where: { id: parseInt(id) } });
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to delete user' }, { status: 500 });
