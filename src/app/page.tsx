@@ -68,20 +68,20 @@ export default function App() {
           animation: drawLine 2.5s ease-out forwards;
         }
         @keyframes drawCandle {
-          0% { stroke-dashoffset: 100; opacity: 0; }
+          0% { stroke-dashoffset: 300; opacity: 0; }
           10% { opacity: 1; }
           100% { stroke-dashoffset: 0; opacity: 1; }
         }
         .animate-candle {
-          stroke-dasharray: 100;
-          stroke-dashoffset: 100;
+          stroke-dasharray: 300;
+          stroke-dashoffset: 300;
           opacity: 0;
           animation: drawCandle 0.8s ease-out forwards;
         }
         .candle-bull { stroke: #10b981; }
         .candle-bear { stroke: #f43f5e; }
-        .glow-bull { filter: drop-shadow(0 0 6px rgba(16,185,129,0.6)); }
-        .glow-bear { filter: drop-shadow(0 0 6px rgba(244,63,94,0.6)); }
+        .glow-bull { filter: drop-shadow(0 0 8px rgba(16,185,129,0.7)); }
+        .glow-bear { filter: drop-shadow(0 0 8px rgba(244,63,94,0.7)); }
         .primary-btn:hover {
           box-shadow: 0 0 25px rgba(163, 230, 53, 0.4);
         }
@@ -162,48 +162,58 @@ export default function App() {
           </p>
 
           {/* Animasi Chart Candlestick */}
-          <div className="w-full max-w-lg mx-auto mb-10 h-32 sm:h-40 relative">
-            <svg viewBox="0 0 400 150" className="w-full h-full drop-shadow-2xl overflow-visible">
+          <div className="w-full max-w-4xl mx-auto mb-12 h-48 sm:h-72 md:h-80 relative">
+            <svg viewBox="0 -80 800 330" className="w-full h-full drop-shadow-2xl overflow-visible">
               {/* Grid Lines */}
-              <line x1="0" y1="50" x2="400" y2="50" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
-              <line x1="0" y1="100" x2="400" y2="100" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
-              <line x1="0" y1="150" x2="400" y2="150" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
+              <line x1="0" y1="0" x2="800" y2="0" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
+              <line x1="0" y1="100" x2="800" y2="100" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
+              <line x1="0" y1="200" x2="800" y2="200" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
 
               {/* Candlesticks */}
               {[
-                { x: 20, type: 'bull', open: 120, close: 100, high: 90, low: 130 },
-                { x: 60, type: 'bear', open: 100, close: 110, high: 95, low: 115 },
-                { x: 100, type: 'bull', open: 110, close: 80, high: 70, low: 120 },
-                { x: 140, type: 'bear', open: 80, close: 85, high: 75, low: 90 },
-                { x: 180, type: 'bull', open: 85, close: 60, high: 50, low: 95 },
-                { x: 220, type: 'bull', open: 60, close: 30, high: 15, low: 75 },
-                { x: 260, type: 'bear', open: 30, close: 45, high: 20, low: 55 },
-                { x: 300, type: 'bull', open: 45, close: 25, high: 10, low: 50 },
-                { x: 340, type: 'bull', open: 25, close: 15, high: 5, low: 35 },
-                { x: 380, type: 'bull', open: 15, close: -5, high: -15, low: 25 },
+                { x: 20, type: 'bull', open: 220, close: 180, high: 160, low: 230 },
+                { x: 60, type: 'bear', open: 180, close: 195, high: 170, low: 205 },
+                { x: 100, type: 'bull', open: 195, close: 150, high: 140, low: 210 },
+                { x: 140, type: 'bull', open: 150, close: 110, high: 90, low: 160 },
+                { x: 180, type: 'bear', open: 110, close: 140, high: 100, low: 150 },
+                { x: 220, type: 'bear', open: 140, close: 155, high: 130, low: 165 },
+                { x: 260, type: 'bull', open: 155, close: 120, high: 100, low: 165 },
+                { x: 300, type: 'bull', open: 120, close: 80, high: 60, low: 130 },
+                { x: 340, type: 'bear', open: 80, close: 105, high: 70, low: 115 },
+                { x: 380, type: 'bear', open: 105, close: 115, high: 95, low: 125 },
+                { x: 420, type: 'bull', open: 115, close: 90, high: 80, low: 130 },
+                { x: 460, type: 'bear', open: 90, close: 105, high: 80, low: 120 },
+                { x: 500, type: 'bull', open: 105, close: 60, high: 40, low: 115 },
+                { x: 540, type: 'bull', open: 60, close: 30, high: 10, low: 80 },
+                { x: 580, type: 'bear', open: 30, close: 50, high: 20, low: 65 },
+                { x: 620, type: 'bull', open: 50, close: 10, high: -10, low: 60 },
+                { x: 660, type: 'bull', open: 10, close: -20, high: -40, low: 20 },
+                { x: 700, type: 'bear', open: -20, close: 0, high: -30, low: 15 },
+                { x: 740, type: 'bull', open: 0, close: -40, high: -60, low: 10 },
+                { x: 780, type: 'bull', open: -40, close: -90, high: -110, low: -20 },
               ].map((c, i) => {
                 const isBull = c.type === 'bull';
                 const colorClass = isBull ? 'candle-bull glow-bull' : 'candle-bear glow-bear';
-                const delay = `${i * 0.15}s`;
+                const delay = `${i * 0.1}s`;
                 return (
                   <g key={i}>
                     {/* Wick */}
-                    <line x1={c.x} y1={isBull ? c.low : c.high} x2={c.x} y2={isBull ? c.high : c.low} className={`animate-candle ${colorClass}`} strokeWidth="2" strokeLinecap="round" style={{ animationDelay: delay }} />
+                    <line x1={c.x} y1={isBull ? c.low : c.high} x2={c.x} y2={isBull ? c.high : c.low} className={`animate-candle ${colorClass}`} strokeWidth="3" strokeLinecap="round" style={{ animationDelay: delay }} />
                     {/* Body */}
-                    <line x1={c.x} y1={c.open} x2={c.x} y2={c.close} className={`animate-candle ${colorClass}`} strokeWidth="12" strokeLinecap="round" style={{ animationDelay: delay }} />
+                    <line x1={c.x} y1={c.open} x2={c.x} y2={c.close} className={`animate-candle ${colorClass}`} strokeWidth="16" strokeLinecap="round" style={{ animationDelay: delay }} />
                   </g>
                 );
               })}
 
               {/* Moving Average Line */}
               <path
-                d="M 0 120 Q 40 105, 100 95 T 200 65 T 300 35 T 400 0"
+                d="M 0 220 Q 80 180, 160 140 T 320 100 T 480 100 T 640 20 T 800 -80"
                 fill="none"
                 stroke="url(#gradient)"
-                strokeWidth="3"
+                strokeWidth="4"
                 strokeLinecap="round"
-                className="animate-draw drop-shadow-[0_0_10px_rgba(163,230,53,0.8)]"
-                style={{ animationDelay: '1.2s' }}
+                className="animate-draw drop-shadow-[0_0_12px_rgba(163,230,53,0.8)]"
+                style={{ animationDelay: '1.5s' }}
               />
 
               <defs>
