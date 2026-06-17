@@ -12,6 +12,8 @@ async function checkAdmin() {
   return user?.role === 'ADMIN';
 }
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const modules = await prisma.module.findMany({ orderBy: { id: 'asc' } });

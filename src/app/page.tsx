@@ -13,11 +13,15 @@ export default function App() {
     setIsLoggedIn(document.cookie.includes('auth_token'));
     fetch('/api/stocks')
       .then(res => res.json())
-      .then(data => setStocksData(data))
+      .then(data => {
+        if (Array.isArray(data)) setStocksData(data);
+      })
       .catch(err => console.error(err));
     fetch('/api/modules')
       .then(res => res.json())
-      .then(data => setModulesData(data))
+      .then(data => {
+        if (Array.isArray(data)) setModulesData(data);
+      })
       .catch(err => console.error(err));
   }, []);
 
