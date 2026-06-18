@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, Send, Download, Lock, CheckCircle, ShieldAlert, BookOpen, BarChart2, Target, User, LogOut, Calculator } from 'lucide-react';
+import { TrendingUp, Send, Download, Lock, CheckCircle, ShieldAlert, BookOpen, BarChart2, Target, User, LogOut, Calculator, X, Percent } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('mingguan');
@@ -10,6 +10,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoadingStocks, setIsLoadingStocks] = useState(true);
   const [isLoadingModules, setIsLoadingModules] = useState(true);
+  const [showCalcModal, setShowCalcModal] = useState(false);
 
   useEffect(() => {
     setIsLoggedIn(document.cookie.includes('auth_token'));
@@ -110,12 +111,12 @@ export default function App() {
           </div>
           
           <div className="flex items-center gap-3">
-            <a
-              href="/calculator"
+            <button
+              onClick={() => setShowCalcModal(true)}
               className="flex items-center gap-2 text-sm font-semibold bg-slate-800/50 hover:bg-slate-800 px-3 sm:px-4 py-2 rounded-full transition-colors border border-slate-700/50 hover:border-lime-400/50"
             >
               <Calculator size={16} className="text-lime-400" /> <span className="hidden sm:inline">Kalkulator</span>
-            </a>
+            </button>
             <a
               href="https://t.me/lagilagisaham"
               target="_blank"
@@ -453,6 +454,49 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* CALCULATOR HUB MODAL */}
+      {showCalcModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0B0F19]/80 backdrop-blur-sm px-4">
+          <div className="bg-[#0F1523] w-full max-w-2xl border border-slate-800 rounded-3xl p-6 relative shadow-2xl animate-fade-in">
+            <button 
+              onClick={() => setShowCalcModal(false)}
+              className="absolute top-6 right-6 text-slate-400 hover:text-white transition-colors bg-slate-800/50 hover:bg-slate-800 p-2 rounded-full"
+            >
+              <X size={20} />
+            </button>
+            
+            <div className="mb-8">
+              <h3 className="text-2xl font-bold text-white flex items-center gap-2 mb-2">
+                <Calculator className="text-lime-400" /> Calculator Hub
+              </h3>
+              <p className="text-slate-400 text-sm">Pilih alat bantu hitung untuk memaksimalkan cuan dan meminimalkan risiko Anda.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <a href="/calculator/dividend" className="group bg-[#0B0F19] border border-slate-800 hover:border-lime-500/50 p-6 rounded-2xl transition-all hover:-translate-y-1 block">
+                <div className="w-12 h-12 bg-lime-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <Percent size={24} className="text-lime-400" />
+                </div>
+                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-lime-400 transition-colors">Kalkulator Dividen</h4>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  Hitung secara instan berapa banyak potensi dividen yang akan Anda dapatkan dari total lot yang Anda punya.
+                </p>
+              </a>
+
+              <a href="/calculator/risk" className="group bg-[#0B0F19] border border-slate-800 hover:border-rose-500/50 p-6 rounded-2xl transition-all hover:-translate-y-1 block">
+                <div className="w-12 h-12 bg-rose-500/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <ShieldAlert size={24} className="text-rose-500" />
+                </div>
+                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-rose-500 transition-colors">Risk Calculator</h4>
+                <p className="text-sm text-slate-400 leading-relaxed">
+                  Hitung batas Stop Loss aman Anda dan Position Sizing yang ideal agar akun trading Anda tidak hancur berantakan.
+                </p>
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
