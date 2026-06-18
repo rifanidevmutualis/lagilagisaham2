@@ -54,6 +54,16 @@ export default function RiskCalculator() {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(number);
   };
 
+  const formatNumberInput = (num: number | '') => {
+    if (num === '') return '';
+    return new Intl.NumberFormat('id-ID').format(num);
+  };
+
+  const handleNumberChange = (value: string, setter: React.Dispatch<React.SetStateAction<number | ''>>) => {
+    const rawValue = value.replace(/\D/g, '');
+    setter(rawValue === '' ? '' : Number(rawValue));
+  };
+
   return (
     <div className="min-h-screen bg-[#0B0F19] text-slate-50 font-sans selection:bg-rose-500/30 overflow-hidden relative">
       {/* Background Glow */}
@@ -99,12 +109,12 @@ export default function RiskCalculator() {
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">Rp</span>
                   <input
-                    type="number"
-                    min="1"
-                    value={modalTrading}
-                    onChange={(e) => setModalTrading(e.target.value === '' ? '' : Number(e.target.value))}
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberInput(modalTrading)}
+                    onChange={(e) => handleNumberChange(e.target.value, setModalTrading)}
                     className="w-full bg-[#0B0F19] border border-slate-700 text-white rounded-xl pl-12 pr-4 py-4 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all font-semibold text-lg"
-                    placeholder="Contoh: 10000000"
+                    placeholder="Contoh: 10.000.000"
                   />
                 </div>
               </div>
@@ -130,12 +140,12 @@ export default function RiskCalculator() {
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">Rp</span>
                   <input
-                    type="number"
-                    min="1"
-                    value={hargaBeli}
-                    onChange={(e) => setHargaBeli(e.target.value === '' ? '' : Number(e.target.value))}
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberInput(hargaBeli)}
+                    onChange={(e) => handleNumberChange(e.target.value, setHargaBeli)}
                     className="w-full bg-[#0B0F19] border border-slate-700 text-white rounded-xl pl-12 pr-4 py-4 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all font-semibold text-lg"
-                    placeholder="Contoh: 1500"
+                    placeholder="Contoh: 1.500"
                   />
                 </div>
               </div>
@@ -145,12 +155,12 @@ export default function RiskCalculator() {
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 font-bold">Rp</span>
                   <input
-                    type="number"
-                    min="1"
-                    value={hargaSL}
-                    onChange={(e) => setHargaSL(e.target.value === '' ? '' : Number(e.target.value))}
+                    type="text"
+                    inputMode="numeric"
+                    value={formatNumberInput(hargaSL)}
+                    onChange={(e) => handleNumberChange(e.target.value, setHargaSL)}
                     className="w-full bg-[#0B0F19] border border-slate-700 text-white rounded-xl pl-12 pr-4 py-4 focus:outline-none focus:border-rose-500 focus:ring-1 focus:ring-rose-500 transition-all font-semibold text-lg"
-                    placeholder="Contoh: 1400"
+                    placeholder="Contoh: 1.400"
                   />
                 </div>
                 {Number(hargaSL) >= Number(hargaBeli) && Number(hargaBeli) > 0 && (
