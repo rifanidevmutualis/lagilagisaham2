@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, Send, Download, Lock, CheckCircle, ShieldAlert, BookOpen, BarChart2, Target, User, LogOut } from 'lucide-react';
+import { TrendingUp, Send, Download, Lock, CheckCircle, ShieldAlert, BookOpen, BarChart2, Target, User, LogOut, Calculator } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('mingguan');
@@ -110,6 +110,12 @@ export default function App() {
           </div>
           
           <div className="flex items-center gap-3">
+            <a
+              href="/calculator"
+              className="hidden sm:flex items-center gap-2 text-sm font-semibold bg-slate-800/50 hover:bg-slate-800 px-4 py-2 rounded-full transition-colors border border-slate-700/50 hover:border-lime-400/50"
+            >
+              <Calculator size={16} className="text-lime-400" /> Kalkulator
+            </a>
             <a
               href="https://t.me/lagilagisaham"
               target="_blank"
