@@ -112,9 +112,9 @@ export default function App() {
           <div className="flex items-center gap-3">
             <a
               href="/calculator"
-              className="hidden sm:flex items-center gap-2 text-sm font-semibold bg-slate-800/50 hover:bg-slate-800 px-4 py-2 rounded-full transition-colors border border-slate-700/50 hover:border-lime-400/50"
+              className="flex items-center gap-2 text-sm font-semibold bg-slate-800/50 hover:bg-slate-800 px-3 sm:px-4 py-2 rounded-full transition-colors border border-slate-700/50 hover:border-lime-400/50"
             >
-              <Calculator size={16} className="text-lime-400" /> Kalkulator
+              <Calculator size={16} className="text-lime-400" /> <span className="hidden sm:inline">Kalkulator</span>
             </a>
             <a
               href="https://t.me/lagilagisaham"
