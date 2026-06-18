@@ -8,6 +8,8 @@ export default function App() {
   const [stocksData, setStocksData] = useState<any[]>([]);
   const [modulesData, setModulesData] = useState<any[]>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoadingStocks, setIsLoadingStocks] = useState(true);
+  const [isLoadingModules, setIsLoadingModules] = useState(true);
 
   useEffect(() => {
     setIsLoggedIn(document.cookie.includes('auth_token'));
@@ -16,13 +18,16 @@ export default function App() {
       .then(data => {
         if (Array.isArray(data)) setStocksData(data);
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .finally(() => setIsLoadingStocks(false));
+      
     fetch('/api/modules')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) setModulesData(data);
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .finally(() => setIsLoadingModules(false));
   }, []);
 
   const handleLogout = () => {
@@ -268,48 +273,73 @@ export default function App() {
 
           {/* KONTEN TAB: DINAMIS */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 animate-fade-in">
-            {stocksData.filter(s => s.type === activeTab).map((stock) => (
-              <div key={stock.id} className="bg-[#0B0F19] p-6 rounded-2xl border border-slate-800 hover:border-lime-500/50 transition-colors">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-2xl font-bold text-white tracking-wider">{stock.ticker}</h3>
-                    <span className="text-xs text-slate-400">{stock.name}</span>
-                  </div>
-                  <span className={`px-2.5 py-1 text-xs font-bold rounded-full flex items-center gap-1 border ${stock.trendColor === 'emerald' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-                    }`}>
-                    <TrendingUp size={12} className={stock.trend === 'Sideways' || stock.trend === 'Konsolidasi' ? 'rotate-90' : ''} /> {stock.trend}
-                  </span>
-                </div>
-                <p className="text-sm text-slate-400 mb-6 border-b border-slate-800 pb-4">
-                  "{stock.analysis}"
-                </p>
-                <div className="space-y-3 relative group select-none">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-500">Entry Area</span>
-                    <span className="font-semibold text-white">{stock.entryArea}</span>
-                  </div>
-                  <div className={`flex justify-between text-sm transition-all duration-500 ${unlockedStocks.includes(stock.ticker) ? '' : 'blur-sm opacity-60'}`}>
-                    <span className="text-slate-500">Target Price (TP)</span>
-                    <span className="font-semibold text-lime-400">{stock.targetPrice}</span>
-                  </div>
-                  <div className={`flex justify-between text-sm transition-all duration-500 ${unlockedStocks.includes(stock.ticker) ? '' : 'blur-sm opacity-60'}`}>
-                    <span className="text-slate-500">Stop Loss (SL)</span>
-                    <span className="font-semibold text-rose-400">{stock.stopLoss}</span>
-                  </div>
-                  {!unlockedStocks.includes(stock.ticker) && (
-                    <div
-                      onClick={() => handleUnlock(stock.ticker)}
-                      className="absolute inset-0 top-6 flex items-center justify-center bg-[#0B0F19]/60 backdrop-blur-[1px] rounded-lg cursor-pointer hover:bg-[#0B0F19]/20 transition-all z-10"
-                    >
-                      <div className="flex items-center gap-2 bg-[#0F1523] px-3 py-1.5 rounded-full border border-slate-700 group-hover:border-lime-400 transition-colors shadow-lg">
-                        <Lock size={14} className="text-lime-400" />
-                        <span className="text-xs font-semibold text-lime-400">Buka Info</span>
-                      </div>
+            {isLoadingStocks ? (
+              // Skeleton Loaders
+              [1, 2, 3].map((i) => (
+                <div key={i} className="bg-[#0B0F19] p-6 rounded-2xl border border-slate-800 animate-pulse">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <div className="h-8 w-24 bg-slate-800 rounded-lg mb-2"></div>
+                      <div className="h-4 w-32 bg-slate-800 rounded-md"></div>
                     </div>
-                  )}
+                    <div className="h-6 w-20 bg-slate-800 rounded-full"></div>
+                  </div>
+                  <div className="h-16 w-full bg-slate-800 rounded-lg mb-6"></div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between"><div className="h-4 w-20 bg-slate-800 rounded"></div><div className="h-4 w-16 bg-slate-800 rounded"></div></div>
+                    <div className="flex justify-between"><div className="h-4 w-24 bg-slate-800 rounded"></div><div className="h-4 w-16 bg-slate-800 rounded"></div></div>
+                    <div className="flex justify-between"><div className="h-4 w-20 bg-slate-800 rounded"></div><div className="h-4 w-16 bg-slate-800 rounded"></div></div>
+                  </div>
                 </div>
+              ))
+            ) : stocksData.filter(s => s.type === activeTab).length > 0 ? (
+              stocksData.filter(s => s.type === activeTab).map((stock) => (
+                <div key={stock.id} className="bg-[#0B0F19] p-6 rounded-2xl border border-slate-800 hover:border-lime-500/50 transition-colors">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="text-2xl font-bold text-white tracking-wider">{stock.ticker}</h3>
+                      <span className="text-xs text-slate-400">{stock.name}</span>
+                    </div>
+                    <span className={`px-2.5 py-1 text-xs font-bold rounded-full flex items-center gap-1 border ${stock.trendColor === 'emerald' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                      }`}>
+                      <TrendingUp size={12} className={stock.trend === 'Sideways' || stock.trend === 'Konsolidasi' ? 'rotate-90' : ''} /> {stock.trend}
+                    </span>
+                  </div>
+                  <p className="text-sm text-slate-400 mb-6 border-b border-slate-800 pb-4">
+                    "{stock.analysis}"
+                  </p>
+                  <div className="space-y-3 relative group select-none">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-500">Entry Area</span>
+                      <span className="font-semibold text-white">{stock.entryArea}</span>
+                    </div>
+                    <div className={`flex justify-between text-sm transition-all duration-500 ${unlockedStocks.includes(stock.ticker) ? '' : 'blur-sm opacity-60'}`}>
+                      <span className="text-slate-500">Target Price (TP)</span>
+                      <span className="font-semibold text-lime-400">{stock.targetPrice}</span>
+                    </div>
+                    <div className={`flex justify-between text-sm transition-all duration-500 ${unlockedStocks.includes(stock.ticker) ? '' : 'blur-sm opacity-60'}`}>
+                      <span className="text-slate-500">Stop Loss (SL)</span>
+                      <span className="font-semibold text-rose-400">{stock.stopLoss}</span>
+                    </div>
+                    {!unlockedStocks.includes(stock.ticker) && (
+                      <div
+                        onClick={() => handleUnlock(stock.ticker)}
+                        className="absolute inset-0 top-6 flex items-center justify-center bg-[#0B0F19]/60 backdrop-blur-[1px] rounded-lg cursor-pointer hover:bg-[#0B0F19]/20 transition-all z-10"
+                      >
+                        <div className="flex items-center gap-2 bg-[#0F1523] px-3 py-1.5 rounded-full border border-slate-700 group-hover:border-lime-400 transition-colors shadow-lg">
+                          <Lock size={14} className="text-lime-400" />
+                          <span className="text-xs font-semibold text-lime-400">Buka Info</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-1 md:col-span-3 text-center text-slate-500 py-10 bg-[#0B0F19] rounded-2xl border border-slate-800 border-dashed">
+                Belum ada saham di radar {activeTab}.
               </div>
-            ))}
+            )}
           </div>
 
           <div className="text-center">
@@ -340,31 +370,50 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {modulesData.map((mod) => {
-              const IconComponent = mod.iconName === 'BarChart2' ? BarChart2 : mod.iconName === 'Target' ? Target : BookOpen;
-              return (
-                <div key={mod.id} className="bg-[#0F1523] p-8 rounded-3xl border border-slate-800 hover:border-lime-400/50 transition-all duration-300 group flex flex-col h-full hover:-translate-y-1 shadow-lg shadow-black/50">
-                  <div className="w-14 h-14 bg-[#0B0F19] rounded-2xl flex items-center justify-center border border-slate-700 mb-6 group-hover:scale-110 transition-transform duration-300 shadow-inner">
-                    <IconComponent size={28} className="text-lime-400" />
+            {isLoadingModules ? (
+              // Skeleton Loaders for Modules
+              [1, 2, 3].map((i) => (
+                <div key={i} className="bg-[#0F1523] p-8 rounded-3xl border border-slate-800 animate-pulse flex flex-col h-full">
+                  <div className="w-14 h-14 bg-slate-800 rounded-2xl mb-6"></div>
+                  <div className="h-6 w-3/4 bg-slate-800 rounded-lg mb-4"></div>
+                  <div className="space-y-2 mb-8 flex-grow">
+                    <div className="h-4 w-full bg-slate-800 rounded"></div>
+                    <div className="h-4 w-5/6 bg-slate-800 rounded"></div>
+                    <div className="h-4 w-4/6 bg-slate-800 rounded"></div>
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-lime-400 transition-colors">{mod.title}</h3>
-                  <p className="text-slate-400 text-sm mb-8 flex-grow leading-relaxed">
-                    {mod.description}
-                  </p>
-                  <a
-                    href={mod.linkUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={handleDownload}
-                    className="inline-flex items-center justify-center gap-2 w-full bg-[#0B0F19] border border-slate-700 group-hover:bg-lime-400 group-hover:text-[#0B0F19] group-hover:border-lime-400 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-300"
-                  >
-                    <Download size={18} />
-                    Akses Modul
-                  </a>
+                  <div className="h-12 w-full bg-slate-800 rounded-xl mt-auto"></div>
                 </div>
-              );
-            })}
-            {modulesData.length === 0 && <div className="col-span-3 text-center text-slate-500 py-10">Belum ada modul yang ditambahkan.</div>}
+              ))
+            ) : modulesData.length > 0 ? (
+              modulesData.map((mod) => {
+                const IconComponent = mod.iconName === 'BarChart2' ? BarChart2 : mod.iconName === 'Target' ? Target : BookOpen;
+                return (
+                  <div key={mod.id} className="bg-[#0F1523] p-8 rounded-3xl border border-slate-800 hover:border-lime-400/50 transition-all duration-300 group flex flex-col h-full hover:-translate-y-1 shadow-lg shadow-black/50">
+                    <div className="w-14 h-14 bg-[#0B0F19] rounded-2xl flex items-center justify-center border border-slate-700 mb-6 group-hover:scale-110 transition-transform duration-300 shadow-inner">
+                      <IconComponent size={28} className="text-lime-400" />
+                    </div>
+                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-lime-400 transition-colors">{mod.title}</h3>
+                    <p className="text-slate-400 text-sm mb-8 flex-grow leading-relaxed">
+                      {mod.description}
+                    </p>
+                    <a
+                      href={mod.linkUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={handleDownload}
+                      className="inline-flex items-center justify-center gap-2 w-full bg-[#0B0F19] border border-slate-700 group-hover:bg-lime-400 group-hover:text-[#0B0F19] group-hover:border-lime-400 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-300"
+                    >
+                      <Download size={18} />
+                      Akses Modul
+                    </a>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="col-span-1 md:col-span-3 text-center text-slate-500 py-10 bg-[#0F1523] rounded-3xl border border-slate-800 border-dashed">
+                Belum ada modul yang ditambahkan.
+              </div>
+            )}
           </div>
         </div>
       </section>
