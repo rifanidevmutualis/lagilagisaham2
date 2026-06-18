@@ -2,12 +2,13 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { TrendingUp, Lock, Mail, User, ArrowRight, Loader2, Phone } from 'lucide-react';
+import { TrendingUp, Lock, Mail, User, ArrowRight, Loader2, Phone, CheckCircle2 } from 'lucide-react';
 
 export default function LoginDashboard() {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -53,7 +54,7 @@ export default function LoginDashboard() {
         // After register, switch to login
         setIsLogin(true);
         setErrorMsg('');
-        alert('Registrasi berhasil! Silakan login.');
+        setShowSuccessPopup(true);
       }
     } catch (err: any) {
       setErrorMsg(err.message);
@@ -197,6 +198,27 @@ export default function LoginDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Success Modal */}
+      {showSuccessPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0B0F19]/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#0F1523] border border-slate-800 rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
+            <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-lime-500/10 mb-6 border border-lime-500/20 shadow-[0_0_30px_rgba(163,230,53,0.2)]">
+              <CheckCircle2 size={40} className="text-lime-400" />
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-3">Registrasi Berhasil!</h3>
+            <p className="text-slate-400 mb-8 leading-relaxed">
+              Selamat bergabung di Lagi Lagi Saham. Akun Anda telah aktif, silakan masuk untuk mulai menikmati fitur radar saham.
+            </p>
+            <button
+              onClick={() => setShowSuccessPopup(false)}
+              className="w-full bg-lime-400 hover:bg-lime-500 text-[#0B0F19] px-6 py-3.5 rounded-xl font-bold text-lg transition-all shadow-[0_0_20px_rgba(163,230,53,0.3)] hover:shadow-[0_0_30px_rgba(163,230,53,0.5)] hover:-translate-y-1"
+            >
+              Lanjutkan Masuk
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
