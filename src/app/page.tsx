@@ -12,6 +12,7 @@ export default function App() {
   const [isLoadingModules, setIsLoadingModules] = useState(true);
   const [showCalcModal, setShowCalcModal] = useState(false);
   const [newsData, setNewsData] = useState<any[]>([]);
+  const [currentDate, setCurrentDate] = useState('');
 
   useEffect(() => {
     setIsLoggedIn(document.cookie.includes('auth_token'));
@@ -37,6 +38,10 @@ export default function App() {
         if (Array.isArray(data)) setNewsData(data);
       })
       .catch(err => console.error(err));
+      
+    // Set format tanggal otomatis
+    const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+    setCurrentDate(new Date().toLocaleDateString('id-ID', options));
   }, []);
 
   const handleLogout = () => {
@@ -120,8 +125,19 @@ export default function App() {
 
       {/* --- NEWS TICKER --- */}
       {newsData.length > 0 && (
-        <div className="bg-lime-400 text-[#0B0F19] overflow-hidden whitespace-nowrap py-2.5 border-b border-lime-500 relative z-50 flex">
-          <div className="flex animate-marquee w-max">
+        <div className="bg-lime-400 text-[#0B0F19] overflow-hidden whitespace-nowrap border-b border-slate-800 relative z-50 flex items-center mb-4">
+          
+          {/* Kotak Judul Berita Tetap */}
+          <div className="bg-[#0B0F19] text-lime-400 font-extrabold px-4 sm:px-6 py-3 relative z-10 flex-shrink-0 shadow-[10px_0_20px_rgba(0,0,0,0.8)] flex items-center gap-3 border-r border-slate-800">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-lime-500"></span>
+            </span>
+            <span className="hidden sm:inline">{currentDate} - Berita Hari ini from CNBC Indonesia</span>
+            <span className="sm:hidden">Berita CNBC</span>
+          </div>
+
+          <div className="flex animate-marquee w-max flex-grow">
             {/* Double the content for seamless loop */}
             {[...newsData, ...newsData].map((news, i) => (
               <span key={i} className="inline-flex items-center mx-6 font-bold text-sm tracking-wide">
