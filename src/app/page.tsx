@@ -11,6 +11,7 @@ export default function App() {
   const [isLoadingStocks, setIsLoadingStocks] = useState(true);
   const [isLoadingModules, setIsLoadingModules] = useState(true);
   const [showCalcModal, setShowCalcModal] = useState(false);
+  const [newsData, setNewsData] = useState<any[]>([]);
 
   useEffect(() => {
     setIsLoggedIn(document.cookie.includes('auth_token'));
@@ -22,13 +23,20 @@ export default function App() {
       .catch(err => console.error(err))
       .finally(() => setIsLoadingStocks(false));
       
-    fetch('/api/modules')
+      fetch('/api/modules')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) setModulesData(data);
       })
       .catch(err => console.error(err))
       .finally(() => setIsLoadingModules(false));
+      
+    fetch('/api/news')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setNewsData(data);
+      })
+      .catch(err => console.error(err));
   }, []);
 
   const handleLogout = () => {
@@ -98,7 +106,34 @@ export default function App() {
         .animate-fade-in {
           animation: fadeIn 0.4s ease-out forwards;
         }
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          animation: marquee 35s linear infinite;
+        }
+        .animate-marquee:hover {
+          animation-play-state: paused;
+        }
       `}} />
+
+      {/* --- NEWS TICKER --- */}
+      {newsData.length > 0 && (
+        <div className="bg-lime-400 text-[#0B0F19] overflow-hidden whitespace-nowrap py-2.5 border-b border-lime-500 relative z-50 flex">
+          <div className="flex animate-marquee w-max">
+            {/* Double the content for seamless loop */}
+            {[...newsData, ...newsData].map((news, i) => (
+              <span key={i} className="inline-flex items-center mx-6 font-bold text-sm tracking-wide">
+                <span className="w-2 h-2 rounded-full bg-[#0B0F19] mr-4 opacity-70"></span>
+                <a href={news.link} target="_blank" rel="noreferrer" className="hover:underline">
+                  {news.title}
+                </a>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* --- HEADER --- */}
       <header className="sticky top-0 z-50 bg-[#0B0F19]/80 backdrop-blur-md border-b border-slate-800/80">
