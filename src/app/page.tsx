@@ -111,7 +111,7 @@ export default function App() {
           100% { transform: translateX(-50%); }
         }
         .animate-marquee {
-          animation: marquee 35s linear infinite;
+          animation: marquee 80s linear infinite;
         }
         .animate-marquee:hover {
           animation-play-state: paused;
