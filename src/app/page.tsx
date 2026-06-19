@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, Send, Download, Lock, CheckCircle, ShieldAlert, BookOpen, BarChart2, Target, User, LogOut, Calculator, X, Percent } from 'lucide-react';
+import { TrendingUp, Send, Download, Lock, CheckCircle, ShieldAlert, BookOpen, BarChart2, Target, User, LogOut, Calculator, X, Percent, Star } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('mingguan');
@@ -421,6 +421,83 @@ export default function App() {
                 Belum ada modul yang ditambahkan.
               </div>
             )}
+          </div>
+        </div>
+      </section>
+
+      {/* --- EPIK 3.5: TESTIMONI CUAN --- */}
+      <section className="py-24 relative overflow-hidden bg-[#0F1523]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-block px-3 py-1 bg-lime-400/10 text-lime-400 text-sm font-semibold rounded-full mb-4 border border-lime-400/20">
+              💬 Testimoni Member
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4">Bukti Nyata Profit Bersama</h2>
+            <p className="text-slate-400 max-w-2xl mx-auto">
+              Lihat bagaimana ratusan member kami telah membuktikan sendiri hasil dari analisa dan modul eksklusif grup kami.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Testimoni 1 */}
+            <div className="bg-[#0B0F19] rounded-3xl overflow-hidden border border-slate-800 hover:border-lime-400/50 transition-all duration-300 group shadow-lg">
+              <div className="aspect-[4/3] bg-slate-800 relative">
+                <img src="/testi-1.jpg" alt="Testimoni 1" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onError={(e) => { e.currentTarget.src = "https://placehold.co/600x400/1e293b/a3e635?text=Upload+Foto+testi-1.jpg" }} />
+              </div>
+              <div className="p-6">
+                <div className="flex gap-1 mb-3">
+                  {[...Array(5)].map((_, i) => <Star key={i} size={16} className="text-lime-400 fill-lime-400" />)}
+                </div>
+                <p className="text-slate-300 italic mb-4">"Berkat sinyal BBCA kemarin, saya bisa cuan 15% dalam 2 hari. Mantap banget analisanya!"</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center font-bold text-slate-300">A</div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm">Andi Setiawan</h4>
+                    <p className="text-xs text-lime-400">Member VIP</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimoni 2 */}
+            <div className="bg-[#0B0F19] rounded-3xl overflow-hidden border border-slate-800 hover:border-lime-400/50 transition-all duration-300 group shadow-lg md:-translate-y-4">
+              <div className="aspect-[4/3] bg-slate-800 relative">
+                <img src="/testi-2.jpg" alt="Testimoni 2" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onError={(e) => { e.currentTarget.src = "https://placehold.co/600x400/1e293b/a3e635?text=Upload+Foto+testi-2.jpg" }} />
+              </div>
+              <div className="p-6">
+                <div className="flex gap-1 mb-3">
+                  {[...Array(5)].map((_, i) => <Star key={i} size={16} className="text-lime-400 fill-lime-400" />)}
+                </div>
+                <p className="text-slate-300 italic mb-4">"Awalnya ragu, tapi setelah ikut arahan cut loss dan entry ulang di BRPT, portofolio saya akhirnya hijau lagi."</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center font-bold text-slate-300">B</div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm">Budi Santoso</h4>
+                    <p className="text-xs text-lime-400">Trader Pemula</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Testimoni 3 */}
+            <div className="bg-[#0B0F19] rounded-3xl overflow-hidden border border-slate-800 hover:border-lime-400/50 transition-all duration-300 group shadow-lg">
+              <div className="aspect-[4/3] bg-slate-800 relative">
+                <img src="/testi-3.jpg" alt="Testimoni 3" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" onError={(e) => { e.currentTarget.src = "https://placehold.co/600x400/1e293b/a3e635?text=Upload+Foto+testi-3.jpg" }} />
+              </div>
+              <div className="p-6">
+                <div className="flex gap-1 mb-3">
+                  {[...Array(5)].map((_, i) => <Star key={i} size={16} className="text-lime-400 fill-lime-400" />)}
+                </div>
+                <p className="text-slate-300 italic mb-4">"Modul belajarnya sangat mudah dipahami. Sekarang saya sudah berani trading mandiri tanpa nunggu sinyal terus."</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center font-bold text-slate-300">C</div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm">Citra Kirana</h4>
+                    <p className="text-xs text-lime-400">Member Alumni</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
